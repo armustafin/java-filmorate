@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.controllers;
+package ru.yandex.practicum.filmorate.controller;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -15,15 +15,16 @@ class FilmControllerTest {
 
     FilmController filmController;
     Film film;
+
     @DisplayName("create film")
     @Test
-    void shouldAddFilm()  {
+    void shouldAddFilm() {
         filmController = new FilmController();
 
         film = new Film();
         film.setId(1);
         film.setName("Ivan");
-        film.setReleaseDate(LocalDate.parse("2010-03-12",FORMATTER));
+        film.setReleaseDate(LocalDate.parse("2010-03-12", FORMATTER));
         film.setDescription("as@ya.ru");
         film.setDuration(10);
 
@@ -31,8 +32,8 @@ class FilmControllerTest {
 
         Map<Integer, Film> films = filmController.films;
         Assertions.assertNotNull(films);
-        Assertions.assertEquals(1, films.size(),1, "users size");
-        assertFilm(film,filmResult);
+        Assertions.assertEquals(1, films.size(), 1, "users size");
+        assertFilm(film, filmResult);
         film.setDuration(0);
         film.setId(2);
         try {
@@ -43,8 +44,8 @@ class FilmControllerTest {
 
 
         Assertions.assertNull(films.get(2));
-        Assertions.assertEquals(1, films.size(),1, "users size");
-        assertFilm(film,filmResult);
+        Assertions.assertEquals(1, films.size(), 1, "users size");
+        assertFilm(film, filmResult);
         film.setName("");
         film.setDuration(120);
         try {
@@ -54,8 +55,8 @@ class FilmControllerTest {
         }
 
         Assertions.assertNull(films.get(2));
-        Assertions.assertEquals(1, films.size(),1, "users size");
-        assertFilm(film,filmResult);
+        Assertions.assertEquals(1, films.size(), 1, "users size");
+        assertFilm(film, filmResult);
         film.setDescription("s".repeat(201));
 
         try {
@@ -65,9 +66,9 @@ class FilmControllerTest {
         }
 
         Assertions.assertNull(films.get(2));
-        Assertions.assertEquals(1, films.size(),1, "users size");
-        assertFilm(film,filmResult);
-        film.setReleaseDate(LocalDate.parse("1895-12-27",FORMATTER));
+        Assertions.assertEquals(1, films.size(), 1, "users size");
+        assertFilm(film, filmResult);
+        film.setReleaseDate(LocalDate.parse("1895-12-27", FORMATTER));
         film.setDescription("as@ya.ru");
         try {
             filmResult = filmController.create(film);
@@ -76,9 +77,10 @@ class FilmControllerTest {
         }
 
         Assertions.assertNull(films.get(2));
-        Assertions.assertEquals(1, films.size(),1, "users size");
-        assertFilm(film,filmResult);
+        Assertions.assertEquals(1, films.size(), 1, "users size");
+        assertFilm(film, filmResult);
     }
+
     private void assertFilm(Film actual, Film film) {
         Assertions.assertEquals(film.getId(), actual.getId(), "film id");
         Assertions.assertEquals(film.getName(), actual.getName(), "film name");

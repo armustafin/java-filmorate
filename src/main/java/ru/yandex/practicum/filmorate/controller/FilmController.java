@@ -1,7 +1,8 @@
-package ru.yandex.practicum.filmorate.controllers;
+package ru.yandex.practicum.filmorate.controller;
 
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -10,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.yandex.practicum.filmorate.exception.InvalidFilmException;
 import ru.yandex.practicum.filmorate.model.Film;
+
+import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,6 +21,7 @@ import java.util.Map;
 
 
 @RestController
+@Validated
 @Slf4j
 @RequestMapping("/films")
 public class FilmController {
@@ -25,23 +29,24 @@ public class FilmController {
     private static final int MAX_LENGTH_STRING = 200;
     private static final LocalDate MIN_DATA_RELEASE = LocalDate.of(1895, 12, 28);
     private static int seq;
-    private static final String dateFormat = "yyyy-MM-dd";
 
     @GetMapping
     public List<Film> allFilms() {
-        log.info("Текущее количество фильмов:" + films.size());
+        log.info("Current number of films:" + films.size());
         return new ArrayList<>(films.values());
     }
 
     @PostMapping
-    public Film create(@RequestBody Film film) {
+    public Film create(@Valid @RequestBody Film film) {
         validateFilm(film);
+        if (film.getId() == 0) {
+            film.setId(generateId());
+        }
         if (films.containsKey(film.getId())) {
-            log.error("Такой фильм уже есть.");
-            throw new InvalidFilmException("Такой фильм уже есть.");
+            throw new InvalidFilmException("A current movie already exists.");
         }
         films.put(film.getId(), film);
-        log.info("Был добавлен фильм :" + film.getName());
+        log.info("The movie has been added :" + film.getName());
         return film;
     }
 
@@ -50,36 +55,28 @@ public class FilmController {
     }
 
     @PutMapping
-    public Film putFilm(@RequestBody Film film) {
+    public Film putFilm(@Valid @RequestBody Film film) {
         validateFilm(film);
         if (!films.containsKey(film.getId())) {
-            log.error("Такого фильма нет.");
-            throw new InvalidFilmException("Такого фильма нет.");
+            throw new InvalidFilmException("There is no such movie");
         }
         films.put(film.getId(),film);
-        log.info("Были обновлены сведения о фильме: "+ film.getName());
+        log.info("A movie information has been updated: "+ film.getName());
         return film;
     }
 
     private static void validateFilm(Film film) {
         if (film.getName() == null || film.getName().isBlank()) {
-            log.error("Не правильно задано название фильма");
-            throw new InvalidFilmException("Не правильно задано название фильма");
+            throw new InvalidFilmException("The name of the movie is incorrect");
         }
         if (film.getDescription().length() > MAX_LENGTH_STRING) {
-            log.error("слишком больше описание фильма: " + film.getName());
-            throw new InvalidFilmException("У пользователя не задан логин.");
+            throw new InvalidFilmException("too much the movie description");
         }
         if (film.getReleaseDate() == null || film.getReleaseDate().isBefore(MIN_DATA_RELEASE)) {
-            log.error("Дата релиза раньше чем самая раняя дата: "+ film.getName());
-            throw new InvalidFilmException("Дата релиза раньше чем самая раняя дата:");
+           throw new InvalidFilmException("Release date earlier than earliest date: "+ film.getName());
         }
         if (film.getDuration() <= 0) {
-            log.error("Продолжительность фильма должна быть положительной: " + film.getName());
-            throw new InvalidFilmException("Продолжительность фильма должна быть положительной:");
-        }
-        if (film.getId() == 0) {
-            film.setId(generateId());
+            throw new InvalidFilmException("The movie duration must be positive:"+ film.getName());
         }
     }
 }
