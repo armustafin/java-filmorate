@@ -23,8 +23,9 @@ import java.util.Map;
 @Slf4j
 @RequestMapping("/users")
 public class UserController {
-    final Map<Integer, User> users = new HashMap<>();
+    private final Map<Integer, User> users = new HashMap<>();
     private static int seq;
+
     @GetMapping
     public List<User> allUsers() {
         log.info("Current number of users: " + users.size());
@@ -38,13 +39,12 @@ public class UserController {
     @PostMapping
     public User create(@Valid @RequestBody User user) {
         validateUsers(user);
-        if (user.getId() == 0) {
-            user.setId(generateId());
-        }
         if (users.containsKey(user.getId())) {
-           throw new InvalidUserException("The user with с id " +
+            throw new InvalidUserException("The user with с id " +
                     user.getId() + " exist.");
         }
+        checkNameUser(user);
+        user.setId(generateId());
         users.put(user.getId(),user);
         log.info("User has been created. His login: " + user.getLogin());
         return user;
@@ -56,24 +56,25 @@ public class UserController {
         if (!users.containsKey(user.getId())) {
            throw new InvalidUserException("There is no user");
         }
+        checkNameUser(user);
         users.put(user.getId(), user);
         log.info("User has been updated. His login:" + user.getLogin());
         return user;
     }
 
     private static void validateUsers(User user) {
-        String email = user.getEmail();
-        if (email == null || email.isBlank() || ! email.contains("@")) {
-            throw new InvalidUserException("The user's email address is incorrect: " + user.getLogin());
-        }
-        if (user.getLogin().isBlank()) {
-           throw new InvalidUserException("The user has no login");
-        }
         if (user.getBirthday().isAfter(LocalDate.now())) {
             throw new InvalidUserException("The user's date of birth cannot be in the future: " + user.getBirthday());
         }
+    }
+
+    private static void checkNameUser(User user) {
         if (user.getName() == null || user.getName().isBlank()) {
             user.setName(user.getLogin());
         }
+    }
+
+    public Map<Integer, User> getUsers() {
+        return users;
     }
 }

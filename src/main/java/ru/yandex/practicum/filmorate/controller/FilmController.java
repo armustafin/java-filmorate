@@ -19,13 +19,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
 @RestController
 @Validated
 @Slf4j
 @RequestMapping("/films")
 public class FilmController {
-    final Map<Integer,Film> films = new HashMap<>();
+    private final Map<Integer,Film> films = new HashMap<>();
     private static final int MAX_LENGTH_STRING = 200;
     private static final LocalDate MIN_DATA_RELEASE = LocalDate.of(1895, 12, 28);
     private static int seq;
@@ -39,12 +38,10 @@ public class FilmController {
     @PostMapping
     public Film create(@Valid @RequestBody Film film) {
         validateFilm(film);
-        if (film.getId() == 0) {
-            film.setId(generateId());
-        }
         if (films.containsKey(film.getId())) {
             throw new InvalidFilmException("A current movie already exists.");
         }
+        film.setId(generateId());
         films.put(film.getId(), film);
         log.info("The movie has been added :" + film.getName());
         return film;
@@ -66,17 +63,15 @@ public class FilmController {
     }
 
     private static void validateFilm(Film film) {
-        if (film.getName() == null || film.getName().isBlank()) {
-            throw new InvalidFilmException("The name of the movie is incorrect");
-        }
         if (film.getDescription().length() > MAX_LENGTH_STRING) {
             throw new InvalidFilmException("too much the movie description");
         }
-        if (film.getReleaseDate() == null || film.getReleaseDate().isBefore(MIN_DATA_RELEASE)) {
+        if (film.getReleaseDate().isBefore(MIN_DATA_RELEASE)) {
            throw new InvalidFilmException("Release date earlier than earliest date: "+ film.getName());
         }
-        if (film.getDuration() <= 0) {
-            throw new InvalidFilmException("The movie duration must be positive:"+ film.getName());
-        }
+    }
+
+    public Map<Integer, Film> getFilms() {
+        return films;
     }
 }

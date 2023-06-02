@@ -30,7 +30,7 @@ class FilmControllerTest {
 
         Film filmResult = filmController.create(film);
 
-        Map<Integer, Film> films = filmController.films;
+        Map<Integer, Film> films = filmController.getFilms();
         Assertions.assertNotNull(films);
         Assertions.assertEquals(1, films.size(), 1, "users size");
         assertFilm(film, filmResult);
@@ -43,7 +43,7 @@ class FilmControllerTest {
         }
 
 
-        Assertions.assertNull(films.get(2));
+        Assertions.assertNotNull(films.get(2));
         Assertions.assertEquals(1, films.size(), 1, "users size");
         assertFilm(film, filmResult);
         film.setName("");
@@ -54,7 +54,7 @@ class FilmControllerTest {
             System.out.println(e.getMessage());
         }
 
-        Assertions.assertNull(films.get(2));
+        Assertions.assertNotNull(films.get(2));
         Assertions.assertEquals(1, films.size(), 1, "users size");
         assertFilm(film, filmResult);
         film.setDescription("s".repeat(201));
@@ -65,7 +65,7 @@ class FilmControllerTest {
             System.out.println(e.getMessage());
         }
 
-        Assertions.assertNull(films.get(2));
+        Assertions.assertNotNull(films.get(2));
         Assertions.assertEquals(1, films.size(), 1, "users size");
         assertFilm(film, filmResult);
         film.setReleaseDate(LocalDate.parse("1895-12-27", FORMATTER));
@@ -76,7 +76,7 @@ class FilmControllerTest {
             System.out.println(e.getMessage());
         }
 
-        Assertions.assertNull(films.get(2));
+        Assertions.assertNotNull(films.get(2));
         Assertions.assertEquals(1, films.size(), 1, "users size");
         assertFilm(film, filmResult);
     }

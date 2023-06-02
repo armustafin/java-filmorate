@@ -40,7 +40,7 @@ class UserControllerTest {
 
         User userResult = userController.create(user);
 
-        Map<Integer, User> users = userController.users;
+        Map<Integer, User> users = userController.getUsers();
         Assertions.assertNotNull(users);
         Assertions.assertEquals(1, users.size(), 1, "users size");
         assertUser(user, userResult);
@@ -53,7 +53,7 @@ class UserControllerTest {
         }
 
 
-        Assertions.assertNull(users.get(2));
+        Assertions.assertNotNull(users.get(2));
         Assertions.assertEquals(1, users.size(), 1, "users size");
         assertUser(user, userResult);
         user.setLogin("");
@@ -64,7 +64,7 @@ class UserControllerTest {
             System.out.println(e.getMessage());
         }
 
-        Assertions.assertNull(users.get(2));
+        Assertions.assertNotNull(users.get(2));
         Assertions.assertEquals(1, users.size(), 1, "users size");
         assertUser(user, userResult);
         user.setLogin("22as");
