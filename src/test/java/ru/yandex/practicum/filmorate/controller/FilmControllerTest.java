@@ -55,7 +55,7 @@ class FilmControllerTest {
         }
 
         Assertions.assertNotNull(films.get(2));
-        Assertions.assertEquals(1, films.size(), 1, "users size");
+        Assertions.assertEquals(3, films.size(), "users size");
         assertFilm(film, filmResult);
         film.setDescription("s".repeat(201));
 
@@ -66,7 +66,7 @@ class FilmControllerTest {
         }
 
         Assertions.assertNotNull(films.get(2));
-        Assertions.assertEquals(1, films.size(), 1, "users size");
+        Assertions.assertEquals(4, films.size(),"users size");
         assertFilm(film, filmResult);
         film.setReleaseDate(LocalDate.parse("1895-12-27", FORMATTER));
         film.setDescription("as@ya.ru");
@@ -77,7 +77,7 @@ class FilmControllerTest {
         }
 
         Assertions.assertNotNull(films.get(2));
-        Assertions.assertEquals(1, films.size(), 1, "users size");
+        Assertions.assertEquals(5, films.size(), "users size");
         assertFilm(film, filmResult);
     }
 

@@ -3,6 +3,8 @@ package ru.yandex.practicum.filmorate.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import ru.yandex.practicum.filmorate.validator.RealiseDateContraint;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
@@ -20,6 +22,7 @@ public class Film {
     @Size(max = MAX_LENGTH_STRING)
     private String description;
     @NotNull(message = "Please provide a release date")
+    @RealiseDateContraint
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate releaseDate;
     @Positive(message = "Please provide a positive number")
