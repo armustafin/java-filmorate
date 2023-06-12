@@ -12,9 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.repository.FilmRepository;
 import javax.validation.Valid;
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @Validated
@@ -22,7 +20,6 @@ import java.util.Map;
 @RequestMapping("/films")
 public class FilmController {
     private final FilmRepository filmRepository = new FilmRepository();
-    private static final LocalDate MIN_DATA_RELEASE = LocalDate.of(1895, 12, 28);
 
     @GetMapping
     public List<Film> allFilms() {
@@ -41,9 +38,5 @@ public class FilmController {
     public Film putFilm(@Valid @RequestBody Film film) {
         log.info("A movie information has been updated: "+ film.getName());
         return   filmRepository.put(film);
-    }
-
-   public Map<Integer, Film> getFilms() {
-        return filmRepository.getFilms();
     }
 }

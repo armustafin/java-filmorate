@@ -7,7 +7,7 @@ import ru.yandex.practicum.filmorate.model.Film;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Map;
+import java.util.List;
 
 
 class FilmControllerTest {
@@ -30,7 +30,7 @@ class FilmControllerTest {
 
         Film filmResult = filmController.create(film);
 
-        Map<Integer, Film> films = filmController.getFilms();
+        List<Film> films = filmController.allFilms();
         Assertions.assertNotNull(films);
         Assertions.assertEquals(1, films.size(), 1, "users size");
         assertFilm(film, filmResult);

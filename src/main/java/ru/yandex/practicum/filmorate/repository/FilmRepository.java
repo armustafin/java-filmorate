@@ -34,7 +34,4 @@ public class FilmRepository {
         return new ArrayList<>(films.values());
     }
 
-    public Map<Integer, Film> getFilms() {
-        return films;
-    }
 }
