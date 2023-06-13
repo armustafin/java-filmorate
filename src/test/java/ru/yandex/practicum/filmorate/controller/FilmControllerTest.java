@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.service.FilmService;
+import ru.yandex.practicum.filmorate.service.UserService;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -19,7 +21,7 @@ class FilmControllerTest {
     @DisplayName("create film")
     @Test
     void shouldAddFilm() {
-        filmController = new FilmController();
+        filmController = new FilmController(new FilmService(new UserService()));
 
         film = new Film();
         film.setId(1);

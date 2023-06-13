@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler {
-   @Override
+    @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
             HttpHeaders headers, HttpStatus status, WebRequest request) {
 
@@ -25,9 +25,9 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
         body.put("timestamp", new Date());
         body.put("status", status.value());
 
-        List<String> errors = ex.getBindingResult().getFieldErrors().stream().map(
-                        DefaultMessageSourceResolvable :: getDefaultMessage)
-                .collect(Collectors.toList());
+        List<String> errors =
+                ex.getBindingResult().getFieldErrors().stream().map(DefaultMessageSourceResolvable :: getDefaultMessage)
+                        .collect(Collectors.toList());
         body.put("errors", errors);
         return new ResponseEntity<>(body, headers, status);
     }
