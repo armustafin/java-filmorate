@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-public class InMemoryUserStorage implements UserStorage{
+public class InMemoryUserStorage implements UserStorage {
     private final Map<Integer, User> users = new HashMap<>();
     private static int seq;
 
@@ -34,13 +34,13 @@ public class InMemoryUserStorage implements UserStorage{
     }
 
     @Override
-    public Boolean del(Integer id) {
-         if (id != null && id != 0 && users.containsKey(id)) {
-             users.remove(id);
-             return true;
-         } else {
-             return false;
-         }
+    public Boolean delete(Integer id) {
+        if (id != null && id != 0 && users.containsKey(id)) {
+            users.remove(id);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
@@ -54,7 +54,7 @@ public class InMemoryUserStorage implements UserStorage{
 
     @Override
     public void deleteAll() {
-       users.clear();
+        users.clear();
     }
 
     private static int generateId() {

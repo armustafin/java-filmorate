@@ -11,7 +11,7 @@ public interface UserStorage {
 
     List<User> allUser();
 
-    Boolean del(Integer id);
+    Boolean delete(Integer id);
 
     User get(Integer id);
 

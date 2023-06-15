@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-public class InMemoryFilmStorage implements FilmStorage{
+public class InMemoryFilmStorage implements FilmStorage {
     private final Map<Integer, Film> films = new HashMap<>();
     private static int seq;
 
@@ -40,7 +40,7 @@ public class InMemoryFilmStorage implements FilmStorage{
     }
 
     @Override
-    public Boolean del(Integer id) {
+    public Boolean delete(Integer id) {
         if (id != null && id != 0 && films.containsKey(id)) {
             films.remove(id);
             return true;
