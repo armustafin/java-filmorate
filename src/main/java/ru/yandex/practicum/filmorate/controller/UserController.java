@@ -22,6 +22,10 @@ import java.util.List;
 @Slf4j
 @RequestMapping("/users")
 public class UserController {
+    public UserService getUserService() {
+        return userService;
+    }
+
     private final UserService userService;
 
     @Autowired
@@ -58,34 +62,26 @@ public class UserController {
 
     @PostMapping
     public User create(@Valid @RequestBody User user) {
-        checkNameUser(user);
         log.info("User has been created. His login: " + user.getLogin());
         return userService.add(user);
     }
 
     @PutMapping
     public User putUser(@Valid @RequestBody User user) {
-        checkNameUser(user);
         log.info("User has been updated. His login:" + user.getLogin());
         return userService.put(user);
     }
 
     @PutMapping("/{id}/friends/{friendId}")
-    public Boolean addToFriend(@PathVariable("id") Integer id, @PathVariable("friendId") Integer friendId) {
+    public void addToFriend(@PathVariable("id") Integer id, @PathVariable("friendId") Integer friendId) {
         log.info("User add to friend");
-        return userService.addToFriends(userService.getUserById(id),
+        userService.addToFriends(userService.getUserById(id),
                 userService.getUserById(friendId));
     }
 
     @DeleteMapping("/{id}/friends/{friendId}")
-    public Boolean delFromFriends(@PathVariable("id") Integer id, @PathVariable("friendId") Integer friendId) {
-        return userService.delFromFriends(userService.getUserById(id),
+    public void deleteFromFriends(@PathVariable("id") Integer id, @PathVariable("friendId") Integer friendId) {
+        userService.deletefromfriends(userService.getUserById(id),
                 userService.getUserById(friendId));
-    }
-
-    private static void checkNameUser(User user) {
-        if (user.getName() == null || user.getName().isBlank()) {
-            user.setName(user.getLogin());
-        }
     }
 }

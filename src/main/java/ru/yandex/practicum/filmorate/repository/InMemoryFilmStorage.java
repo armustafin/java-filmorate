@@ -40,22 +40,13 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public Boolean delete(Integer id) {
-        if (id != null && id != 0 && films.containsKey(id)) {
-            films.remove(id);
-            return true;
-        } else {
-            return false;
-        }
+    public Film delete(Integer id) {
+       return films.remove(id);
     }
 
     @Override
     public Film get(Integer id) {
-        if (id != null && id != 0 && films.containsKey(id)) {
-            return films.get(id);
-        } else {
-            return null;
-        }
+       return films.get(id);
     }
 
     @Override

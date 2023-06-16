@@ -14,9 +14,6 @@ public class InMemoryUserStorage implements UserStorage {
     private final Map<Integer, User> users = new HashMap<>();
     private static int seq;
 
-    public InMemoryUserStorage() {
-    }
-
     @Override
     public User add(User user) {
         user.setId(generateId());
@@ -34,22 +31,13 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     @Override
-    public Boolean delete(Integer id) {
-        if (id != null && id != 0 && users.containsKey(id)) {
-            users.remove(id);
-            return true;
-        } else {
-            return false;
-        }
+    public User delete(Integer id) {
+        return users.remove(id);
     }
 
     @Override
     public User get(Integer id) {
-        if (id != null && id != 0 && users.containsKey(id)) {
-            return users.get(id);
-        } else {
-            return null;
-        }
+       return users.get(id);
     }
 
     @Override

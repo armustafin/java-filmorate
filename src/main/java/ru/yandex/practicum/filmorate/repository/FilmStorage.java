@@ -12,7 +12,7 @@ public interface FilmStorage {
 
     List<Film> allFilms();
 
-    Boolean delete(Integer id);
+    Film delete(Integer id);
 
     Film get(Integer id);
 

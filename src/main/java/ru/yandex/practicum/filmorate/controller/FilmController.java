@@ -57,22 +57,22 @@ public class FilmController {
     }
 
     @PutMapping("/{id}/like/{userId}")
-    public Boolean addLike(@PathVariable("id") Integer id, @PathVariable("userId") Integer userId) {
+    public void addLike(@PathVariable("id") Integer id, @PathVariable("userId") Integer userId) {
        log.info("A movie add to favorite");
-       return filmService.addToFavorite(filmService.getFilmById(id),
+       filmService.addToFavorite(filmService.getFilmById(id),
                 filmService.getUserById(userId));
     }
 
     @DeleteMapping("/{id}/like/{userId}")
-    public Boolean deleteLike(@PathVariable("id") Integer id, @PathVariable("userId") Integer userId) {
+    public void deleteLike(@PathVariable("id") Integer id, @PathVariable("userId") Integer userId) {
         log.info("A movie delete to favorite");
-        return filmService.delFromFavorite(filmService.getFilmById(id),
+        filmService.deleteFromFavorite(filmService.getFilmById(id),
                 filmService.getUserById(userId));
     }
 
     @GetMapping("/popular")
     public List<Film> findFavoriteFilms(@RequestParam(defaultValue = "10", required = false) Integer count) {
         log.debug("list sort favorite");
-        return filmService.AllFavorite(count);
+        return filmService.allFavorite(count);
     }
 }

@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.repository.InMemoryUserStorage;
 import ru.yandex.practicum.filmorate.service.UserService;
 
 
@@ -27,7 +28,7 @@ class UserControllerTest {
     @DisplayName("create user")
     @Test
     void shouldAddUser() {
-        userController = new UserController(new UserService());
+        userController = new UserController(new UserService(new InMemoryUserStorage()));
 
         user = new User();
         user.setId(1);
