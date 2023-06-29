@@ -47,8 +47,9 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
         body.put("status", status.value());
 
         List<String> errors =
-                ex.getBindingResult().getFieldErrors().stream().map(DefaultMessageSourceResolvable :: getDefaultMessage)
+                ex.getBindingResult().getFieldErrors().stream().map(DefaultMessageSourceResolvable::getDefaultMessage)
                         .collect(Collectors.toList());
+
         body.put("errors", errors);
         return new ResponseEntity<>(body, headers, status);
     }

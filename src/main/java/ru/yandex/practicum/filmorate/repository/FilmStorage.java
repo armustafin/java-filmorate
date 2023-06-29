@@ -7,15 +7,15 @@ import ru.yandex.practicum.filmorate.model.User;
 import java.util.List;
 
 public interface FilmStorage {
-    Film add(Film film);
+    Film save(Film film);
 
-    Film put(Film film);
+    Film update(Film film);
 
-    List<Film> allFilms();
+    List<Film> findAllFilms();
 
     Film delete(Integer id);
 
-    Film get(Integer id);
+    Film findById(Integer id);
 
     void deleteAll();
 

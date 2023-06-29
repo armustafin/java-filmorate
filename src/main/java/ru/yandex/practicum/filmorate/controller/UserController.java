@@ -22,10 +22,6 @@ import java.util.List;
 @Slf4j
 @RequestMapping("/users")
 public class UserController {
-    public UserService getUserService() {
-        return userService;
-    }
-
     private final UserService userService;
 
     @Autowired

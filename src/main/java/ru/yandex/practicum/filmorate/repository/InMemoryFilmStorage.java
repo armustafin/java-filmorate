@@ -20,7 +20,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     private static int seq;
 
     @Override
-    public Film add(Film film) {
+    public Film save(Film film) {
         film.setId(generateId());
         films.put(film.getId(), film);
         filmInFavorite.put(film.getId(), new HashSet<>());
@@ -41,14 +41,14 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     @Override
     public List<Film> allFavorite(Integer count) {
-        return allFilms().stream()
+        return findAllFilms().stream()
                 .sorted((p0, p1) -> {return Integer.compare(filmInFavorite.get(p1.getId()).size(),
                         filmInFavorite.get(p0.getId()).size());})
                 .limit(count)
                 .collect(Collectors.toList());
     }
     @Override
-    public Film put(Film film) {
+    public Film update(Film film) {
         if (! films.containsKey(film.getId())) {
             throw new InvalidUserException("The film with с id " + film.getId() + " exist.");
         }
@@ -61,7 +61,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public List<Film> allFilms() {
+    public List<Film> findAllFilms() {
         return new ArrayList<>(films.values());
     }
 
@@ -71,7 +71,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     }
 
     @Override
-    public Film get(Integer id) {
+    public Film findById(Integer id) {
        return films.get(id);
     }
 

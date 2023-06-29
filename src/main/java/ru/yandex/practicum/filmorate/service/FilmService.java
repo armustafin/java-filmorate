@@ -24,15 +24,15 @@ public class FilmService {
     }
 
     public Film add(Film film) {
-        return filmStorage.add(film);
+        return filmStorage.save(film);
     }
 
     public Film put(Film film) {
-        return filmStorage.put(film);
+        return filmStorage.update(film);
     }
 
     public List<Film> allFilms() {
-        return filmStorage.allFilms();
+        return filmStorage.findAllFilms();
     }
 
     public void addToFavorite(Film film, User user) {
@@ -63,10 +63,10 @@ public class FilmService {
     }
 
     public Film getFilmById(int id) {
-        if (filmStorage.get(id) == null) {
+        if (filmStorage.findById(id) == null) {
             throw new InvalidFilmException("id not exist");
         }
-        return filmStorage.get(id);
+        return filmStorage.findById(id);
     }
 
     public User getUserById(int id) {
