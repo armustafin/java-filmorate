@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.repository.InMemoryFilmStorage;
 import ru.yandex.practicum.filmorate.repository.InMemoryUserStorage;
 import ru.yandex.practicum.filmorate.service.FilmService;
 
@@ -22,7 +23,7 @@ class FilmControllerTest {
     @DisplayName("create film")
     @Test
     void shouldAddFilm() {
-        filmController = new FilmController(new FilmService(new InMemoryUserStorage()));
+        filmController = new FilmController(new FilmService(new InMemoryUserStorage(), new InMemoryFilmStorage()));
 
         film = new Film();
         film.setId(1);

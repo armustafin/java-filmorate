@@ -33,35 +33,16 @@ public class UserService {
         return userStorage.allUser();
     }
 
-    public Boolean addToFriends(User user, User friend) {
-        if (user != null && friend != null && userStorage.allUser().contains(user) &&
-                userStorage.allUser().contains(friend)) {
-            user.getFriends().add(friend.getId());
-            friend.getFriends().add(user.getId());
-            return true;
-        }
-        return false;
+    public void addToFriends(User user, User friend) {
+        userStorage.addFriend(user, friend);
     }
 
-    public Boolean deletefromfriends(User user, User friend) {
-        if (user != null && friend != null && userStorage.allUser().contains(user) &&
-                userStorage.allUser().contains(friend)) {
-            if (user.getFriends().contains(friend.getId())) {
-                user.getFriends().remove(friend.getId());
-                friend.getFriends().remove(user.getId());
-            }
-            return true;
-        }
-        return false;
+    public void deletefromfriends(User user, User friend) {
+        userStorage.deleteFriend(user, friend);
     }
 
     public List<User> AllFriends(User user) {
-        if (user != null && userStorage.allUser().contains(user)) {
-            return user.getFriends().stream()
-                    .map(key -> userStorage.get(key))
-                    .collect(Collectors.toList());
-        }
-        return new ArrayList<>();
+        return userStorage.AllFriends(user);
     }
 
     public UserStorage getUserStorage() {
@@ -79,18 +60,13 @@ public class UserService {
     }
 
     public List<User> getFriendsById(Integer id) {
-        return new ArrayList<>(getUserById(id).getFriends()).stream()
-                .map(key -> getUserById(key))
-                .collect(Collectors.toList());
+        return userStorage.AllFriends(userStorage.get(id));
     }
 
     public List<User> getCommonFriends(Integer id, Integer otherId) {
-        Set<User> users = new HashSet<>(getUserStorage().get(id).getFriends()).stream()
-                .map(key -> getUserStorage().get(key))
-                .collect(Collectors.toSet());
-        users.retainAll(new ArrayList<>(getUserStorage().get(otherId).getFriends()).stream()
-                .map(key -> getUserStorage().get(key))
-                .collect(Collectors.toList()));
+        Set<User> users = new HashSet<>(userStorage.AllFriends(userStorage.get(id)).stream()
+                .collect(Collectors.toSet()));
+        users.retainAll(new ArrayList<>(userStorage.AllFriends(userStorage.get(otherId))));
         return new ArrayList<>(users);
     }
 

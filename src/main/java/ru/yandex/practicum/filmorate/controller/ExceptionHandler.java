@@ -24,12 +24,20 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class ExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @org.springframework.web.bind.annotation.ExceptionHandler({InvalidFilmException.class, InvalidUserException.class})
+    @org.springframework.web.bind.annotation.ExceptionHandler({InvalidFilmException.class, InvalidUserException.class, })
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleIncorrectFilmException(final RuntimeException e ) {
         log.warn(e.getMessage(),e);
         return new ErrorResponse(e.getClass().toString() + ":" + e.getMessage());
     }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse handleException(final Exception e) {
+        log.warn("Error", e);
+        return new ErrorResponse(e.getMessage());
+    }
+
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
             HttpHeaders headers, HttpStatus status, WebRequest request) {

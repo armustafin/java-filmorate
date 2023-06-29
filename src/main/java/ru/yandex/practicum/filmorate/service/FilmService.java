@@ -7,20 +7,20 @@ import ru.yandex.practicum.filmorate.exception.InvalidUserException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.repository.FilmStorage;
-import ru.yandex.practicum.filmorate.repository.InMemoryFilmStorage;
 import ru.yandex.practicum.filmorate.repository.UserStorage;
 
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 @Service
 public class FilmService {
-    private final FilmStorage filmStorage = new InMemoryFilmStorage();
+    private final FilmStorage filmStorage;
     private final UserStorage userStorage;
 
     @Autowired
-    public FilmService(UserStorage userStorage) {
+    public FilmService(UserStorage userStorage, FilmStorage filmStorage) {
         this.userStorage = userStorage;
+        this.filmStorage = filmStorage;
     }
 
     public Film add(Film film) {
@@ -35,40 +35,31 @@ public class FilmService {
         return filmStorage.allFilms();
     }
 
-    public Boolean addToFavorite(Film film, User user) {
-        if (film != null && user != null && filmStorage.allFilms().contains(film) &&
-                userStorage.allUser().contains(user)) {
-            filmStorage.get(film.getId()).getFavorite().add(user.getId());
-            return true;
-        }
-        return false;
-    }
-
-    public Boolean deleteFromFavorite(Film film, User user) {
+    public void addToFavorite(Film film, User user) {
         if (user == null) {
             throw new InvalidUserException("user not found");
         }
         if (film == null) {
             throw new InvalidFilmException("film not found");
         }
-        if (filmStorage.allFilms().contains(film) &&
-                userStorage.allUser().contains(user)) {
-            if (film.getFavorite().contains(user.getId())) {
-                filmStorage.get(film.getId()).getFavorite().remove(user.getId());
-            }
-            return true;
+        filmStorage.addToFavorite(film, user);
+    }
+
+    public void deleteFromFavorite(Film film, User user) {
+        if (user == null) {
+            throw new InvalidUserException("user not found");
         }
-        return false;
+        if (film == null) {
+            throw new InvalidFilmException("film not found");
+        }
+        filmStorage.deleteFromFavorite(film, user);
     }
 
     public List<Film> allFavorite(Integer count) {
         if (count <= 0) {
             throw new InvalidFilmException("count less zero");
         }
-        return filmStorage.allFilms().stream()
-                .sorted((p0, p1) -> {return Integer.compare(p1.getFavorite().size(), p0.getFavorite().size());})
-                .limit(count)
-                .collect(Collectors.toList());
+        return filmStorage.allFavorite(count);
     }
 
     public Film getFilmById(int id) {

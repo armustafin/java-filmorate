@@ -6,12 +6,17 @@ import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 public class InMemoryUserStorage implements UserStorage {
     private final Map<Integer, User> users = new HashMap<>();
+    private final HashMap<Integer, Set<Integer>> userFriendsNotValid = new HashMap<>();
+    private final HashMap<Integer, Set<Integer>> userFriendsValid = new HashMap<>();
     private static int seq;
 
     @Override
@@ -28,6 +33,29 @@ public class InMemoryUserStorage implements UserStorage {
         }
         users.put(user.getId(), user);
         return user;
+    }
+
+    @Override
+    public void addFriend(User user, User friend) {
+        Set<Integer> uFriendIds = userFriendsNotValid.computeIfAbsent(user.getId(), id -> new HashSet<>());
+        uFriendIds.add(friend.getId());
+        Set<Integer> fFriendIds = userFriendsNotValid.computeIfAbsent(friend.getId(), id -> new HashSet<>());
+        fFriendIds.add(user.getId());
+    }
+
+    @Override
+    public void deleteFriend(User user, User friend) {
+        Set<Integer> uFriendIds = userFriendsNotValid.computeIfAbsent(user.getId(), id -> new HashSet<>());
+        uFriendIds.remove(friend.getId());
+
+        Set<Integer> fFriendIds = userFriendsNotValid.computeIfAbsent(friend.getId(), id -> new HashSet<>());
+        fFriendIds.remove(user.getId());
+    }
+
+    @Override
+    public List<User> AllFriends(User user) {
+        Set<Integer> uFriendIds = userFriendsNotValid.computeIfAbsent(user.getId(), id -> new HashSet<>());
+        return uFriendIds.stream().map(id -> get(id)).collect(Collectors.toList());
     }
 
     @Override

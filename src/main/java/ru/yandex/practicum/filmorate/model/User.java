@@ -3,14 +3,11 @@ package ru.yandex.practicum.filmorate.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
 
 @Data
 public class User {
@@ -26,6 +23,4 @@ public class User {
     @JsonFormat(pattern = "yyyy-MM-dd")
     @NotNull
     private LocalDate birthday;
-    @EqualsAndHashCode.Exclude
-    private Set<Integer> friends = new HashSet<>();
 }
