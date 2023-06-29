@@ -7,12 +7,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
-
 import java.time.format.DateTimeFormatter;
-
-import java.util.Map;
-
+import java.util.List;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.repository.InMemoryUserStorage;
+import ru.yandex.practicum.filmorate.service.UserService;
 
 
 class UserControllerTest {
@@ -29,7 +28,7 @@ class UserControllerTest {
     @DisplayName("create user")
     @Test
     void shouldAddUser() {
-        userController = new UserController();
+        userController = new UserController(new UserService(new InMemoryUserStorage()));
 
         user = new User();
         user.setId(1);
@@ -40,7 +39,7 @@ class UserControllerTest {
 
         User userResult = userController.create(user);
 
-        Map<Integer, User> users = userController.getUsers();
+        List<User> users = userController.allUsers();
         Assertions.assertNotNull(users);
         Assertions.assertEquals(1, users.size(), 1, "users size");
         assertUser(user, userResult);
